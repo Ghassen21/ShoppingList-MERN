@@ -1,14 +1,30 @@
- const express = require('express');
- const mongoose =require('mongoose');
- const bodyParser=require('body-parser');
- require("dotenv").config();
- const app=express();
-  const db = mongoose.connection;
- // Bodyparser Middleware
- app.use(bodyParser.json());
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+
+require("dotenv").config();
+const app = express();
 
 
- //setup mangoose
+// routes
+//import authRoutes from './routes/api/auth';
+ itemRoutes = require ('./routes/api/items');
+//import userRoutes from './routes/api/users';
+
+
+const db = mongoose.connection;
+// Bodyparser Middleware
+app.use(bodyParser.json());
+
+
+
+
+// routes
+//import authRoutes from './routes/api/auth';
+//import userRoutes from './routes/api/users';
+
+
+//setup mangoose
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,18 +33,22 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {
 
 
 
-db.once('open', function() {
-  console.info ('MongoDB connected successfully...');
+db.once('open', function () {
+  console.info('MongoDB connected successfully...');
 });
 
-db.on('error', function(error) {
-  console.error("Connection to MongoDb failed !!!",error)
+db.on('error', function (error) {
+  console.error("Connection to MongoDb failed !!!", error)
 });
+
+// Use Routes
+app.use('/api/items', itemRoutes);
+//app.use('/api/users', userRoutes);
+//app.use('/api/auth', authRoutes);
 
 
 const PORT = process.env.PORT || 5000;
 
 
 
-app.listen(PORT, () => console.info (`listening on port ${PORT}and To get started, visit: http://localhost:5000`))
-  
+app.listen(PORT, () => console.info(`listening on port ${PORT}and To get started, visit: http://localhost:5000`))
