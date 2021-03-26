@@ -8,11 +8,9 @@ export default class ShoppingList extends Component {
     this.state = {
       items: [{ id: uuid(), name: "Eggs" }, { id: uuid(), name: "Milk" }, { id: uuid(), name: "Steak" }, { id: uuid(), name: "Water" }]
     }
-    this.onClick=this.onClick.bind(this)
+    
   }
-  onClick(e) {
-    console.log("e.target.value:",e );
-  }
+  
   render() {
     const { items } = this.state
     return (
@@ -28,19 +26,16 @@ export default class ShoppingList extends Component {
           }}>Add Item</Button>
         <ListGroup>
           <TransitionGroup className="shopping-list">
-            {items.map((item) => ( 
-              <CSSTransition  timeout={500} classNames="fade">
-                <ListGroupItem key={item.id}>
+            {items.map(({id,name}) => ( 
+              <CSSTransition key={id} timeout={500} classNames="fade">
+                <ListGroupItem >
                   <Button className="remove-btn"
                     color="warning"
-                    size="sm" onClick={this.onClick}
-                      /*(state,e,id) => {
-                      console.log("id:",e )  
-                      this.setState(state => ({ items: this.state.items.filter(item => item.id !== id) }))
-                      console.log("items:",this.state)
-                    }}*/
+                    size="sm" onClick={()=>this.setState(state => ({
+                      items : state.items.filter(item => item.id != id)}))
+                    }
                   >&times;</Button>
-                  {item.name} 
+                  {name} 
                 </ListGroupItem>
               </CSSTransition>
             ))}
